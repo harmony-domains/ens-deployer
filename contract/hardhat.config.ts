@@ -87,6 +87,7 @@ const hardhatUserconfig: HardhatUserConfig = {
     runOnCompile: true,
     clear: true,
     flat: true,
+    pretty: true,
     only: [
       'BaseRegistrarImplementation',
       'DummyOracle',
@@ -117,7 +118,6 @@ const hardhatUserconfig: HardhatUserConfig = {
       'UniversalResolver'
 
     ],
-    format: 'json',
     spacing: 2
   },
   contractSizer: {

@@ -1,20 +1,3 @@
 [
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "node",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      }
-    ],
-    "name": "setName",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
+  "function setName(bytes32,string)"
 ]
