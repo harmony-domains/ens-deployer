@@ -48,7 +48,7 @@ const f = async function (hre: HardhatRuntimeEnvironment) {
 
   console.log('- universalResolver deployed to:', await ensDeployer.universalResolver())
 
-  const receipt = await ensDeployer.transferOwner(deployer).then(tx => tx.wait())
+  const receipt = await ensDeployer.transferOwner(TLD, deployer).then(tx => tx.wait())
   console.log('tx', receipt.transactionHash)
   const ens = await ethers.getContractAt('ENSRegistry', await ensDeployer.ens())
   console.log('ens owner:', await ens.owner(new Uint8Array(32)))
@@ -71,6 +71,9 @@ const f = async function (hre: HardhatRuntimeEnvironment) {
     UniversalResolver: await ensDeployer.universalResolver(),
     Multicall: await Multicall.address
   }) + '\'')
+
+  // Additional tasks not set in ENSDeployer.sol
+
   // Add some records for local testing (used by go-1ns)
   if (hre.network.name === 'local') {
     console.log(`about to registerDomain in network: ${hre.network.name}`)

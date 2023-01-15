@@ -90,19 +90,24 @@ library ENSControllerDeployer {
 
 library ENSPublicResolverDeployer {
     function deployResolver(
+        string memory tld,
         ENS ens,
         TLDNameWrapper nameWrapper,
         RegistrarController registrarController,
         ReverseRegistrar reverseRegistrar
     ) public returns (PublicResolver publicResolver) {
         publicResolver = new PublicResolver(ens, INameWrapperForPublicResolver(address(nameWrapper)), address(registrarController), address(reverseRegistrar));
-        bytes32 resolverNode = ENSUtils.namehash(ENSUtils.RESOLVER_LABEL);
-
-        //        note that in newer ens-contract deployment script, resolver address is set to `resolver.<tld>`, instead of just `resolver`. I am not sure if that has any significance, if it does we should update the lines below to be consistent with that
-        //        bytes32 tldNode = ENSUtils.namehash(keccak256(abi.encodePacked(tld)));
-        //        bytes32 resolverNode = ENSUtils.namehash(tldNode, ENSUtils.RESOLVER_LABEL);
-        //        ens.setSubnodeOwner(bytes32(0), tldNode, address(this));
+        // Older version of deploy script sets the resolver at the root level
+        // reference https://docs.ens.domains/deploying-ens-on-a-private-chain#deploying-ens-in-a-single-transaction
+        // bytes32 resolverNode = ENSUtils.namehash(ENSUtils.RESOLVER_LABEL);
         ens.setSubnodeOwner(bytes32(0), ENSUtils.RESOLVER_LABEL, address(this));
+
+        // Newer version sets the resolver node at the TLD level
+        // reference https://github.com/ensdomains/ens-contracts/blob/master/deploy/resolvers/00_deploy_public_resolver.ts#L34
+        bytes32 tldNode = ENSUtils.namehash(keccak256(abi.encodePacked(tld)));
+        bytes32 resolverNode = ENSUtils.namehash(tldNode, ENSUtils.RESOLVER_LABEL);
+        ens.setSubnodeOwner(tldNode, ENSUtils.RESOLVER_LABEL, address(this));
+
         ens.setResolver(resolverNode, address(publicResolver));
         publicResolver.setAddr(resolverNode, address(publicResolver));
     }
@@ -128,7 +133,7 @@ contract ENSDeployer is Ownable {
     function deployResolver(string memory tld) public onlyOwner {
         bytes32 tld_label = keccak256(bytes(tld));
         bytes32 tld_node = ENSUtils.namehash(tld_label);
-        publicResolver = ENSPublicResolverDeployer.deployResolver(ens, nameWrapper, registrarController, reverseRegistrar);
+        publicResolver = ENSPublicResolverDeployer.deployResolver(tld, ens, nameWrapper, registrarController, reverseRegistrar);
         reverseRegistrar.setDefaultResolver(address(publicResolver));
 
         // get from scripts/computeInterfaceId.ts
@@ -170,10 +175,10 @@ contract ENSDeployer is Ownable {
         setOwnership(tld);
     }
 
-    function transferOwner(address dest) external onlyOwner {
+    function transferOwner(string memory tld, address dest) external onlyOwner {
         ens.setSubnodeOwner(bytes32(0), ENSUtils.REVERSE_REGISTRAR_LABEL, dest);
         ens.setSubnodeOwner(bytes32(0), ENSUtils.RESOLVER_LABEL, dest);
-        //        ens.setSubnodeOwner(bytes32(0), ENSUtils.namehash(keccak256(abi.encodePacked(tld))), dest);
+        ens.setSubnodeOwner(bytes32(0), ENSUtils.namehash(keccak256(abi.encodePacked(tld))), dest);
         ens.setOwner(bytes32(0), dest);
         nameWrapper.transferOwnership(dest);
         baseRegistrar.transferOwnership(dest);

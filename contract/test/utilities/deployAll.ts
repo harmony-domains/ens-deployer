@@ -66,7 +66,7 @@ export async function deploy (context) {
   console.log('- universalResolver deployed to:', await context.ensDeployer.universalResolver())
   context.universalResolver = await ethers.getContractAt('PublicResolver', await context.ensDeployer.universalResolver())
 
-  const receipt = await context.ensDeployer.transferOwner(deployer).then(tx => tx.wait())
+  const receipt = await context.ensDeployer.transferOwner(TLD, deployer).then(tx => tx.wait())
   console.log('ensDeployer.transferOwner tx', receipt.transactionHash)
   const ens = await ethers.getContractAt('ENSRegistry', await context.ensDeployer.ens())
   console.log('ens owner:', await ens.owner(new Uint8Array(32)))
