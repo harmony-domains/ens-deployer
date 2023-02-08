@@ -8,6 +8,7 @@
     "scripts": {
         "compile": "npx hardhat compile",
         "deploy": "npx hardhat deploy",
+        "deployDNS": "npx hardhat deploy --deploy-scripts ./deployDNS --network mainnetpk",
         "test": "npx hardhat test",
         "test-deploy": "npx hardhat test ./test/deployment/Deployment.ts",
         "test-dns": "npx hardhat test ./test/dns/DNS.ts"

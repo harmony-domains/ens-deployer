@@ -65,6 +65,15 @@ const hardhatUserconfig: HardhatUserConfig = {
       gasMultiplier: 2,
       gas: 10e+6
     },
+    mainnetpk: {
+      url: process.env.MAINNET_URL,
+      accounts: [process.env.PRIVATE_KEY || ''],
+      chainId: 1666600000,
+      live: true,
+      gasPrice: 100e+9,
+      gasMultiplier: 2,
+      gas: 10e+6
+    },
     s1: {
       url: process.env.S1_URL,
       accounts: { mnemonic: process.env.MNEMONIC },
