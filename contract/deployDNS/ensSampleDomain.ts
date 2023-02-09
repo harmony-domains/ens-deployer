@@ -4,16 +4,13 @@ import { BufferConsumer, BufferWriter, DNSRecord } from 'dns-js'
 import { PublicResolver } from '../typechain'
 const namehash = require('eth-ens-namehash')
 
-const ORACLE_UNIT_PRICE = parseInt(process.env.ORACLE_PRICE_PER_SECOND_IN_WEIS || '3')
-// console.log('ORACLE_UNIT_PRICE', ORACLE_UNIT_PRICE)
 console.log('Just Sample Domain only works for mainnetpk')
 const f = async function (hre: HardhatRuntimeEnvironment) {
   if (hre.network.name === 'mainnetpk') {
     const signers = await hre.ethers.getSigners()
     const alice = signers[0]
     console.log(`alice.address: ${alice.address}`)
-    await registerDomain('jwtest', alice, '128.0.0.1', process.env.PUBLIC_RESOLVER, process.env.REGISTRAR_CONTROLLER)
-    await registerDomain('jwtesta', alice, '128.0.0.2', process.env.PUBLIC_RESOLVER, process.env.REGISTRAR_CONTROLLER)
+    await registerDomain('testlongdomain', alice, '34.120.199.241', process.env.PUBLIC_RESOLVER, process.env.REGISTRAR_CONTROLLER)
   }
 }
 f.tags = ['ENSSampleDomain']
@@ -21,7 +18,7 @@ export default f
 
 async function registerDomain (domain, owner, ip, resolverAddress, registrarControllerAddress) {
   const ONE_ETH = ethers.utils.parseEther('1')
-  const duration = ethers.BigNumber.from(3 * 24 * 3600)
+  const duration = ethers.BigNumber.from(28 * 24 * 3600)
   const secret = '0x0000000000000000000000000000000000000000000000000000000000000000'
   const callData = []
   const reverseRecord = false
@@ -53,7 +50,7 @@ async function registerDomain (domain, owner, ip, resolverAddress, registrarCont
     fuses,
     wrapperExpiry,
     {
-      value: ONE_ETH.mul(11)
+      value: ONE_ETH.mul(20)
     }
   )
   await tx.wait()
@@ -78,7 +75,7 @@ async function registerDomain (domain, owner, ip, resolverAddress, registrarCont
     '0x0000000000000000000000000000000000000000000000000000000000000001'
   )
   await tx.wait()
-  console.log(`Created records for: ${domain + '.' + TLD} and ${aNameFQDN} same ip address: ${ip}`)
+  console.log(`Created records for: ${domain + '.' + TLD} ip address: ${ip}`)
   console.log('==================')
 }
 
