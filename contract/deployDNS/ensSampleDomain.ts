@@ -24,6 +24,12 @@ async function registerDomain (domain, owner, ip, resolverAddress, registrarCont
   const reverseRecord = false
   const fuses = ethers.BigNumber.from(0)
   const wrapperExpiry = ethers.BigNumber.from(new Uint8Array(8).fill(255)).toString()
+  //   const priceOracle = await ethers.getContractAt('LengthBasedPriceOracle', process.env.PRICE_ORACLE)
+  //   const price = await priceOracle.price(domain, 0, duration)
+  //   console.log(`registering domain: ${domain}`)
+  //   console.log(`price          : ${JSON.stringify(price.toString())}`)
+  //   console.log(`price.base     : ${ethers.utils.formatEther(price.base)}`)
+  //   console.log(`price.premium  : ${ethers.utils.formatEther(price.premium)}`)
   const registrarController = await ethers.getContractAt('RegistrarController', registrarControllerAddress)
   const commitment = await registrarController.connect(owner).makeCommitment(
     domain,
@@ -50,7 +56,8 @@ async function registerDomain (domain, owner, ip, resolverAddress, registrarCont
     fuses,
     wrapperExpiry,
     {
-      value: ONE_ETH.mul(20)
+      value: ONE_ETH.mul(3)
+    //   value: price.base.add(price.premium)
     }
   )
   await tx.wait()
