@@ -1,6 +1,6 @@
 // import { expect } from "chai";
 import { ethers } from 'hardhat'
-import config from '../config'
+import config from '../../config'
 
 // const name = '.country'
 // const symbol = 'DC'
