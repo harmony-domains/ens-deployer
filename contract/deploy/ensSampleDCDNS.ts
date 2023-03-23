@@ -134,7 +134,11 @@ async function registerDomain (domain: string, owner: SignerWithAddress, url: st
     function getData(uint256 id) public view override(ERC1155Fuse, INameWrapper) returns (address, uint32, uint64) {
     function uri(uint256 tokenId) public view override returns (string memory) {
   */
-
+  console.log(`a.country uri tldNameWrapper: ${await tldNameWrapper.uri(namehash.hash('a.country'))}`)
+  console.log(`a.country uri               : ${ethers.utils.id(namehash.hash('a.country'))}  `)
+  console.log(`a.country tid               : ${ethers.BigNumber.from(namehash.hash('a.country'))}  `)
+  console.log(`testtesttest110.country uri : ${ethers.utils.id(namehash.hash('testtesttest110.country'))}  `)
+  console.log(`testtesttest110.country tid : ${ethers.BigNumber.from(namehash.hash('testtesttest110.country'))}  `)
   const [owner1155, fuses, fuseExpiry] = await tldNameWrapper.getData(node)
   console.log('======================NFT FROM TLDWRAPPER ====================')
   console.log(`owner                              : ${owner.address}`)
@@ -144,6 +148,7 @@ async function registerDomain (domain: string, owner: SignerWithAddress, url: st
   console.log(`node:  namehash.hash(nodeURL)      : ${node}`)
   console.log(`ethers.utils.id(node)              : ${(ethers.utils.id(node))}`)
   console.log(`tokenId ethers.BigNumber.from(node): ${ethers.BigNumber.from(node)}`)
+  console.log(`node from TokenId                  : ${ethers.BigNumber.from(node).toHexString()}`)
   console.log(`owner                              : ${await tldNameWrapper.ownerOf(node)}`)
   console.log(`URI                                : ${await tldNameWrapper.uri(node)}`)
   console.log(`1155owner                          : ${owner1155}`)
@@ -164,6 +169,28 @@ const func = async function (hre: HardhatRuntimeEnvironment) {
   const bob = signers[5]
 
   // Register Domains
+  await registerDomain('a', alice, 'tweet.polymorpher.country', '148.0.0.1')
+  // node
+  const nodeURL = 'a.country'
+  const node = namehash.hash(nodeURL) // 0x97cb60f41aa9c0aedfc85b76e4ffc8cb2b845b001fe1b19b78f73b3b734e1fa7
+  const tokenID = ethers.BigNumber.from(node) // 68658579238907467122893703214502809166139884805022338151742896602255318720423
+  const metadataPrefix = 'https://storage.googleapis.com/radical-domain-metadata/erc1155/'
+  const metadataURL = metadataPrefix + node // https://storage.googleapis.com/radical-domain-metadata/erc1155/0x97cb60f41aa9c0aedfc85b76e4ffc8cb2b845b001fe1b19b78f73b3b734e1fa7
+
+  // getting the nodeurl from the tokenId
+  const tokenIDString = '68658579238907467122893703214502809166139884805022338151742896602255318720423'
+  const tokenIDBigNumber = ethers.BigNumber.from(tokenIDString)
+  const nodeFromTokenId = tokenIDBigNumber.toHexString()// 0x97cb60f41aa9c0aedfc85b76e4ffc8cb2b845b001fe1b19b78f73b3b734e1fa7
+
+  console.log('=============== Sample data for a.country ========================')
+  console.log(`nodeURL        : ${nodeURL}`)
+  console.log(`node           : ${node}`)
+  console.log(`tokenID        : ${tokenID}`)
+  console.log(`metadataPrefix : ${metadataPrefix}`)
+  console.log(`metadataURL    : ${metadataURL}`)
+  console.log(`nodeFromTokenId: ${nodeFromTokenId}`)
+  console.log('=============== End Sample data for a.country ====================')
+
   await registerDomain('polymorpher', alice, 'tweet.polymorpher.country', '148.0.0.1')
   await registerDomain('tweettesta', alice, 'tweet.tweettesta.country', '138.0.0.2')
   await registerDomain('tweettestb', bob, 'tweet.tweettestb.country', '138.0.0.3')
