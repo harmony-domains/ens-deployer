@@ -4,7 +4,7 @@ pragma solidity >=0.8.4;
 import "@ensdomains/ens-contracts/contracts/registry/ENSRegistry.sol";
 import "@ensdomains/ens-contracts/contracts/registry/FIFSRegistrar.sol";
 // import "@ensdomains/ens-contracts/contracts/wrapper/StaticMetadataService.sol";
-import "./TLDMetaDataService.sol";
+import "./TLDMetadataService.sol";
 import "./TLDNameWrapper.sol";
 import "@ensdomains/ens-contracts/contracts/ethregistrar/BaseRegistrarImplementation.sol";
 import "@ensdomains/ens-contracts/contracts/ethregistrar/IBaseRegistrar.sol";
