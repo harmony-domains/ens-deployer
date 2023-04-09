@@ -6,4 +6,4 @@ rm -rf db
 # ganache -b 2 --server.ws --database.dbPath "./db" -m "test test test test test test test test test test test junk"
 
 # Use for fast tests
-ganache --server.ws --database.dbPath "./db" -m "test test test test test test test test test test test junk"
+ganache --server.ws --database.dbPath "./db" -m "test test test test test test test test test test test junk"  -e 100000
